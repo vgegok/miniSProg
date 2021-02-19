@@ -1,5 +1,6 @@
 miniSProg
 =========
+![image](https://github.com/vgegok/miniSProg/blob/update/Screenshot/Screenshot.png)
 
 GUI programmer for miniSpartan6+ development board
 
