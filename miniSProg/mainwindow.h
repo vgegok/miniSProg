@@ -47,12 +47,17 @@ private slots:
 
     void on_toolBtnProg_clicked();
     void on_toolBtnBit_clicked();
+    void on_toolBtnBscan_clicked();
 
     void on_checkBox_details_stateChanged(int status);
 
     void on_pushButton_Program_clicked();
 
     void on_actionAbout_triggered();
+
+    void on_radioBtnLoader_clicked();
+
+    void on_radioBtnProg_clicked();
 
 private:
     Ui::MainWindow *ui;

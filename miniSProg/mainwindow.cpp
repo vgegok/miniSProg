@@ -47,6 +47,11 @@ MainWindow::MainWindow(QWidget *parent) :
     if (xc3sprog_file.exists() && xc3sprog_file.isFile()) {
         ui->lineEdit_xc3sprog->setText(xc3sprog_file.canonicalFilePath());
     }
+
+    ui->toolBtnBscan->setEnabled(false);
+    ui->lineEdit_bscanfile->setEnabled(false);
+    ui->checkBoxRbt->setEnabled(false);
+    ui->checkBoxRbt->setText("Reboot is defalt");
 }
 
 MainWindow::~MainWindow()
@@ -77,10 +82,10 @@ void MainWindow::procError(QProcess::ProcessError procError)
     ui->textEdit->append(proc->errorString());
 
     switch (procError) {
-      case QProcess::FailedToStart:
+    case QProcess::FailedToStart:
         ui->textEdit->append(tr("Failed to start"));
         break;
-      case QProcess::Crashed:
+    case QProcess::Crashed:
         ui->textEdit->append(tr("Crashed"));
         break;
     case QProcess::Timedout:
@@ -88,9 +93,9 @@ void MainWindow::procError(QProcess::ProcessError procError)
         break;
     case QProcess::UnknownError:
         ui->textEdit->append(tr("Unknown Error"));
-      default:
+    default:
         ui->textEdit->append(tr("REALLY! Unknown Error"));
-      }
+    }
 
     setDefaultConsoleColor();
 }
@@ -100,18 +105,18 @@ void MainWindow::procExited(int exitCode, QProcess::ExitStatus exitStatus)
     ui->textEdit->append("Done.");
     //ui->textEdit->append(QString::number(exitCode));
 
-//    if ( myProcess->exitStatus() == 0)
-//    {
-//    qDebug () << "Program ran successfully";
-//    }
-//    if ( myProcess->exitStatus() == 2)
-//    {
-//    qDebug () << "Customized message";
-//    }
-//    if ( myProcess->exitStatus() == 3)
-//    {
-//    qDebug () << "Another text warning message";
-//    }
+    //    if ( myProcess->exitStatus() == 0)
+    //    {
+    //    qDebug () << "Program ran successfully";
+    //    }
+    //    if ( myProcess->exitStatus() == 2)
+    //    {
+    //    qDebug () << "Customized message";
+    //    }
+    //    if ( myProcess->exitStatus() == 3)
+    //    {
+    //    qDebug () << "Another text warning message";
+    //    }
 
 }
 
@@ -142,6 +147,12 @@ void MainWindow::on_toolBtnBit_clicked()
     ui->lineEdit_bitfile->setText(bitfile_path);
 }
 
+void MainWindow::on_toolBtnBscan_clicked()
+{
+    QString bscanfile_path = QFileDialog::getOpenFileName(this, tr("Select the Bscan file"),"./",tr("bit Files (*.bit)"));
+    ui->lineEdit_bscanfile->setText(bscanfile_path);
+}
+
 void MainWindow::on_checkBox_details_stateChanged(int status)
 {
     // status 0 => Hide, 2 => Show
@@ -167,11 +178,33 @@ void MainWindow::on_pushButton_Program_clicked()
         setDefaultConsoleColor();
     } else {
         QString program = ui->lineEdit_xc3sprog->text();
-        QStringList arguments;
-        arguments.append("-c");
-        arguments.append("ftdi");
-        arguments.append(ui->lineEdit_bitfile->text());
-        proc->start(program, arguments);
+        QStringList arguments_load;
+        QStringList arguments_prog;
+        QStringList arguments_reboot;
+        arguments_load.append("-c");
+        arguments_load.append("ftdi");
+        if(ui->radioBtnLoader->isChecked()){
+            arguments_load.append(ui->lineEdit_bitfile->text());
+        }else{
+            arguments_load.append(ui->lineEdit_bscanfile->text());
+        }
+        proc->start(program, arguments_load);
+        proc->waitForFinished();
+        if(ui->radioBtnProg->isChecked()){
+            arguments_prog.append("-c");
+            arguments_prog.append("ftdi");
+            arguments_prog.append("-I");
+            arguments_prog.append(ui->lineEdit_bitfile->text());
+            ui->textEdit->append("Program Done, FPGA Will Reboot!\n");
+            proc->start(program,arguments_prog);
+            proc->waitForFinished();
+            if(ui->checkBoxRbt->isChecked()){
+                arguments_reboot.append("-c");
+                arguments_reboot.append("ftdi");
+                arguments_reboot.append("-R");
+                proc->start(program,arguments_reboot);
+            }
+        }
     }
 }
 
@@ -183,6 +216,26 @@ void MainWindow::on_actionAbout_triggered()
                         "the FPGA board miniSpartan6+.<br><br>"
                         "Source code: <a href='https://github.com/fduraibi/miniSProg'>https://github.com/fduraibi/miniSProg</a><br>"
                         "Developed by: Fahad Alduraibi<br>"
-                        "v1.0");
+                        "Updated   by: Vgegok<br>"
+                        "v2.0 2021.02.19");
     QMessageBox::about(this, myTitle, myBody);
+}
+
+
+
+void MainWindow::on_radioBtnLoader_clicked()
+{
+    ui->toolBtnBscan->setEnabled(false);
+    ui->lineEdit_bscanfile->setEnabled(false);
+    ui->checkBoxRbt->setEnabled(false);
+    ui->checkBoxRbt->setText("Reboot is defalt");
+
+}
+
+void MainWindow::on_radioBtnProg_clicked()
+{
+    ui->toolBtnBscan->setEnabled(true);
+    ui->lineEdit_bscanfile->setEnabled(true);
+    ui->checkBoxRbt->setEnabled(true);
+    ui->checkBoxRbt->setText("Reboot when finshed");
 }

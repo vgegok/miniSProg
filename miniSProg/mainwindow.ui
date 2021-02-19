@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
-    <height>373</height>
+    <width>512</width>
+    <height>513</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,6 +25,41 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QFrame" name="frame_3">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QRadioButton" name="radioBtnLoader">
+         <property name="acceptDrops">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Loader to RAM</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioBtnProg">
+         <property name="text">
+          <string>Program to SPI Flash</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item>
      <widget class="QFrame" name="frame">
       <property name="sizePolicy">
@@ -69,19 +104,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>.bit file</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <widget class="QLineEdit" name="lineEdit_bitfile"/>
        </item>
@@ -99,6 +121,46 @@
         <widget class="QToolButton" name="toolBtnBit">
          <property name="text">
           <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QToolButton" name="toolBtnBscan">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>.bit file</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_bscanfile">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>.bit Bscan file</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -190,6 +252,16 @@ QCheckBox::indicator:checked {
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkBoxRbt">
+         <property name="text">
+          <string>Reboot when finshed</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton_Program">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -246,8 +318,8 @@ QCheckBox::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>495</width>
-     <height>20</height>
+     <width>512</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
